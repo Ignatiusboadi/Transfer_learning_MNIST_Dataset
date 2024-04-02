@@ -4,10 +4,10 @@ import pandas as pd
 import torch
 
 transform = transforms.Compose([transforms.ToTensor(), ])
-train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
+train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=False)
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=len(train_dataset), shuffle=False)
 
-test_dataset = datasets.MNIST(root='./data', train=False, transform=transform, download=True)
+test_dataset = datasets.MNIST(root='./data', train=False, transform=transform, download=False)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=len(test_dataset), shuffle=False)
 
 
@@ -49,3 +49,6 @@ def to_tensor():
 
     return (X_train_odd, X_train_even, X_test_odd, X_test_even, y_train_odd, y_train_even, y_test_odd, y_test_even,
             n_features_odd, n_features_even)
+
+
+

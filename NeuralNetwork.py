@@ -24,7 +24,7 @@ class NeuralNetwork(nn.Module):
         layer2_linear_output = self.layer2(layer1_activations)
         return F.softmax(layer2_linear_output, dim=1)
 
-    def fit(self, X_train, y_train, X_test, y_test, n_epochs, criterion, optimizer):
+    def fit(self, X_train, y_train, X_test, y_test, n_epochs, criterion, optimizer, label_decoder):
         losses = []
         for epoch in range(n_epochs):
             y_pred = self.forward(X_train)
@@ -40,7 +40,7 @@ class NeuralNetwork(nn.Module):
 
         with torch.no_grad():
             y_pred = self.forward(X_test)
-            y_pred_cls = torch.argmax(y_pred, axis=1)
+            y_pred_cls = torch.tensor(label_decoder.inverse_transform(torch.argmax(y_pred, axis=1)), dtype=torch.long)
             accuracy = torch.mean((y_pred_cls == y_test).float()) * 100
             print(f"Accuracy: {accuracy.item()}")
             plt.plot(losses)

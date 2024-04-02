@@ -16,7 +16,7 @@ class SoftmaxRegression(nn.Module):
         y_pred = self.linear(x)
         return y_pred
 
-    def fit(self, X_train, y_train, X_test, y_test, n_epochs, criterion, optimizer):
+    def fit(self, X_train, y_train, X_test, y_test, n_epochs, criterion, optimizer, label_decoder):
         losses = []
         for epoch in range(n_epochs):
             y_pred = self.forward(X_train)
@@ -27,12 +27,12 @@ class SoftmaxRegression(nn.Module):
 
             optimizer.step()
             optimizer.zero_grad()
-            if  (epoch + 1) % 200 == 0:
+            if  (epoch + 1) % 100 == 0:
                 print(f'Epoch {epoch + 1} out of {n_epochs}, loss= {loss.item():.4f}')
 
         with torch.no_grad():
             y_pred = self.forward(X_test)
-            y_pred_cls = torch.argmax(y_pred, axis=1)
+            y_pred_cls = torch.tensor(label_decoder.inverse_transform(torch.argmax(y_pred, axis=1)), dtype=torch.long)
             accuracy = torch.mean((y_pred_cls == y_test).float()) * 100
             print(f"Accuracy: {accuracy.item()}")
             plt.plot(losses)
