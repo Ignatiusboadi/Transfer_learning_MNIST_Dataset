@@ -1,4 +1,4 @@
-from torch import nn
+from torch import nn, optim
 
 import matplotlib.pyplot as plt
 import torch

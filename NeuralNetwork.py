@@ -1,4 +1,5 @@
-from torch import nn
+from torch import nn, optim
+from torch.nn import functional as F
 
 import matplotlib.pyplot as plt
 import torch
