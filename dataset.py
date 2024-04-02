@@ -1,13 +1,14 @@
-from torchvision import datasets
+from torchvision import datasets, transforms
 
 import numpy as np
 import pandas as pd
 import torch
 
-train_dataset = datasets.MNIST(root='./data', train=True, download=True)
+transform = transforms.Compose([transforms.ToTensor(), ])
+train_dataset = datasets.MNIST(root='./data', train=True, transform=transform, download=True)
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=len(train_dataset), shuffle=False)
 
-test_dataset = datasets.MNIST(root='./data', train=False, download=True)
+test_dataset = datasets.MNIST(root='./data', train=False, transform=transform, download=True)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=len(test_dataset), shuffle=False)
 
 
@@ -27,3 +28,5 @@ def even_odd_split(loader):
     return even_data, odd_data
 
 
+train_even_data, train_odd_data = even_odd_split(train_loader)
+test_even_data, test_odd_data = even_odd_split(test_loader)
