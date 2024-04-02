@@ -17,7 +17,7 @@ def even_odd_split(loader):
         images_pixels = images
         labels = labels
 
-    images_flattened = images_pixels.reshape(images.shape[0], -1)
+    images_flattened = images_pixels.reshape(images_pixels.shape[0], -1)
 
     images_data = pd.DataFrame(images_flattened)
     images_data['label'] = pd.Series(labels)
@@ -28,5 +28,25 @@ def even_odd_split(loader):
     return even_data, odd_data
 
 
-train_even_data, train_odd_data = even_odd_split(train_loader)
-test_even_data, test_odd_data = even_odd_split(test_loader)
+def to_tensor():
+    train_even_data, train_odd_data = even_odd_split(train_loader)
+    test_even_data, test_odd_data = even_odd_split(test_loader)
+
+    X_train_even = torch.tensor(train_even_data.drop(columns=['label']).values, dtype=torch.float32)/255
+    y_train_even = torch.tensor(train_even_data['label'].values, dtype=torch.long)
+
+    X_test_even = torch.tensor(test_even_data.drop(columns=['label']).values, dtype=torch.float32)/255
+    y_test_even = torch.tensor(test_even_data['label'].values, dtype=torch.long)
+
+    n_samples_even, n_features_even = X_train_even.shape
+
+    X_train_odd = torch.tensor(train_odd_data.drop(columns=['label']).values, dtype=torch.float32)/255
+    y_train_odd = torch.tensor(train_odd_data['label'].values, dtype=torch.long)
+
+    X_test_odd = torch.tensor(test_odd_data.drop(columns=['label']).values, dtype=torch.float32)/255
+    y_test_odd = torch.tensor(test_odd_data['label'].values, dtype=torch.long)
+
+    n_samples_odd, n_features_odd = X_train_odd.shape
+
+    return (X_train_odd, X_train_even, X_test_odd, X_test_even, y_train_odd, y_train_even, y_test_odd, y_test_even,
+            n_features_odd, n_features_even)
