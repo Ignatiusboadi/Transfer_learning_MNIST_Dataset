@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import torch
 
 
+criterion = nn.CrossEntropyLoss()
+
+
 class NeuralNetwork(nn.Module):
     def __init__(self, in_features, hidden_layer_size, out_features):
         super().__init__()
