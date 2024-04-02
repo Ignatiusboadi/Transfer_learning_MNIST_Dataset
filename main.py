@@ -22,8 +22,8 @@ y_train_odd = torch.tensor(le_odd.transform(y_train_odd))
 y_train_even = torch.tensor(le_even.transform(y_train_even))
 
 
-def plot_confusion_even(model, title, file):
-    y_pred_cls = le_even.inverse_transform(torch.argmax(model.forward(X_test_even), axis=1))
+def plot_confusion_even(model, title, file, test_data=X_test_even):
+    y_pred_cls = le_even.inverse_transform(torch.argmax(model.forward(test_data), axis=1))
     conf_matrix = confusion_matrix(y_pred_cls, y_test_even, normalize='pred') * 100
     plt.figure(figsize=(8, 6))
     sns.heatmap(conf_matrix, annot=True, cmap="Blues", xticklabels=np.arange(0, 10, 2),
@@ -35,12 +35,11 @@ def plot_confusion_even(model, title, file):
     plt.show()
 
 
-def plot_confusion_odd(model, title, file):
-    y_pred_cls = le_odd.inverse_transform(torch.argmax(model.forward(X_test_odd), axis=1))
+def plot_confusion_odd(model, title, file, test_data=X_test_odd):
+    y_pred_cls = le_odd.inverse_transform(torch.argmax(model.forward(test_data), axis=1))
     conf_matrix = confusion_matrix(y_pred_cls, y_test_odd, normalize='pred') * 100
     plt.figure(figsize=(8, 6))
-    sns.heatmap(conf_matrix, annot=True, cmap="Blues", xticklabels=np.arange(1, 10, 2),
-                yticklabels=np.arange(1, 10, 2))
+    sns.heatmap(conf_matrix, annot=True, cmap="Blues", xticklabels=np.arange(1, 10, 2), yticklabels=np.arange(1, 10, 2))
     plt.xlabel('Predicted labels')
     plt.ylabel('True labels')
     plt.title(f'{title}(%)')
@@ -64,7 +63,7 @@ plot_confusion_even(even_model, 'Softmax Regression for MNIST Even dataset', 'ev
 odd_model = SoftmaxRegression(n_features_odd, n_classes)
 optimizer = torch.optim.Adam(odd_model.parameters(), lr=lr)
 odd_model.fit(X_train_odd, y_train_odd, X_test_odd, y_test_odd, n_epochs, criterion, optimizer, le_odd)
-plot_confusion_even(odd_model, 'Softmax Regression for MNIST Odd dataset', 'odd')
+plot_confusion_odd(odd_model, 'Softmax Regression for MNIST Odd dataset', 'odd')
 
 # Task 2
 # Neural Network on Even numbers
@@ -92,6 +91,7 @@ _, n_features = X_train.shape
 trans_even_model = SoftmaxRegression(n_features, n_classes)
 optimizer = torch.optim.Adam(trans_even_model.parameters(), lr=lr)
 trans_even_model.fit(X_train, y_train_even, X_test, y_test_even, n_epochs, criterion, optimizer, le_even)
+plot_confusion_even(trans_even_model, 'Transfer Learning for MNIST Even dataset', 'trans_even', X_test)
 
 # Extracting the weights from the first layer of the nn model for odd numbers
 layer1_weight = nn_even_model.layer1.weight.data
@@ -104,3 +104,4 @@ _, n_features = X_train.shape
 trans_odd_model = SoftmaxRegression(n_features, n_classes)
 optimizer = torch.optim.Adam(trans_odd_model.parameters(), lr=lr)
 trans_odd_model.fit(X_train, y_train_odd, X_test, y_test_odd, n_epochs, criterion, optimizer, le_odd)
+plot_confusion_odd(trans_odd_model, 'Transfer learning for MNIST Odd dataset', 'trans_odd', X_test)
