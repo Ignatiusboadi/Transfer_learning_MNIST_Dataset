@@ -48,7 +48,7 @@ def plot_confusion_odd(model, title, file, test_data=X_test_odd):
 
 
 n_classes = 5
-n_epochs = 1000
+n_epochs = 100
 lr = 0.1
 hidden_layer = 500
 
@@ -116,5 +116,5 @@ for percentage in percentages:
     optimizer = torch.optim.Adam(trans_odd_model.parameters(), lr=lr)
     trans_odd_model.fit(X_train_trans_odd[:perc_samples], y_train_odd[:perc_samples], X_test_trans_odd,
                         y_test_odd, n_epochs, criterion, optimizer, le_odd)
-    plot_confusion_odd(trans_odd_model, 'Transfer learning for {100*percentage}% MNIST Odd dataset',
+    plot_confusion_odd(trans_odd_model, f'Transfer learning for {100*percentage}% MNIST Odd dataset',
                        'trans_odd', X_test_trans_odd)
