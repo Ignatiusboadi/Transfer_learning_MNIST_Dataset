@@ -48,22 +48,22 @@ def plot_confusion_odd(model, title, file, test_data=X_test_odd):
 
 
 n_classes = 5
-n_epochs = 100
+n_epochs = 1000
 lr = 0.1
 hidden_layer = 500
 
 # Task 1
 # # Softmax regression on Even numbers
-# even_model = SoftmaxRegression(n_features_even, n_classes)
-# optimizer = torch.optim.Adam(even_model.parameters(), lr=lr)
-# even_model.fit(X_train_even, y_train_even, X_test_even, y_test_even, n_epochs, criterion, optimizer, le_even)
-# plot_confusion_even(even_model, 'Softmax Regression for MNIST Even dataset', 'even')
-#
-# # Softmax regression on Odd numbers
-# odd_model = SoftmaxRegression(n_features_odd, n_classes)
-# optimizer = torch.optim.Adam(odd_model.parameters(), lr=lr)
-# odd_model.fit(X_train_odd, y_train_odd, X_test_odd, y_test_odd, n_epochs, criterion, optimizer, le_odd)
-# plot_confusion_odd(odd_model, 'Softmax Regression for MNIST Odd dataset', 'odd')
+even_model = SoftmaxRegression(n_features_even, n_classes)
+optimizer = torch.optim.Adam(even_model.parameters(), lr=lr)
+even_model.fit(X_train_even, y_train_even, X_test_even, y_test_even, n_epochs, criterion, optimizer, le_even)
+plot_confusion_even(even_model, 'Softmax Regression for MNIST Even dataset', 'even')
+
+# Softmax regression on Odd numbers
+odd_model = SoftmaxRegression(n_features_odd, n_classes)
+optimizer = torch.optim.Adam(odd_model.parameters(), lr=lr)
+odd_model.fit(X_train_odd, y_train_odd, X_test_odd, y_test_odd, n_epochs, criterion, optimizer, le_odd)
+plot_confusion_odd(odd_model, 'Softmax Regression for MNIST Odd dataset', 'odd')
 
 # Task 2
 # Neural Network on Even numbers
@@ -117,4 +117,4 @@ for percentage in percentages:
     trans_odd_model.fit(X_train_trans_odd[:perc_samples], y_train_odd[:perc_samples], X_test_trans_odd,
                         y_test_odd, n_epochs, criterion, optimizer, le_odd)
     plot_confusion_odd(trans_odd_model, f'Transfer learning for {100*percentage}% MNIST Odd dataset',
-                       'trans_odd', X_test_trans_odd)
+                       f'{100*percentage}% trans_odd', X_test_trans_odd)

@@ -34,7 +34,7 @@ class SoftmaxRegression(nn.Module):
             y_pred = self.forward(X_test)
             y_pred_cls = torch.tensor(label_decoder.inverse_transform(torch.argmax(y_pred, axis=1)), dtype=torch.long)
             accuracy = torch.mean((y_pred_cls == y_test).float()) * 100
-            print(f"Accuracy: {accuracy.item()}")
+            print(f"Accuracy: {accuracy.item()}", end='\n\n\n')
             plt.plot(losses)
             plt.xlabel('Epochs')
             plt.ylabel('Loss')
