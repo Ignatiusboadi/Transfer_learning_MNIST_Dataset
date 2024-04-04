@@ -1,14 +1,14 @@
 from dataset import *
 
 from matplotlib import pyplot as plt
-from NeuralNetwork import NeuralNetwork, criterion
-import seaborn as sns
+from NeuralNetwork import NeuralNetwork
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import confusion_matrix
 from SoftmaxRegression import SoftmaxRegression, criterion
-from torch import nn, optim
+from torch import nn
 
 import numpy as np
+import seaborn as sns
 
 X_train_odd, X_train_even, X_test_odd, X_test_even, y_train_odd, y_train_even, y_test_odd, y_test_even, n_features_odd, n_features_even = to_tensor()
 
