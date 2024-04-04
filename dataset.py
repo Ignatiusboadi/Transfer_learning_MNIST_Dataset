@@ -31,16 +31,24 @@ def to_tensor():
     train_even_data, train_odd_data = even_odd_split(train_loader)
     test_even_data, test_odd_data = even_odd_split(test_loader)
 
-    X_train_even = torch.tensor(train_even_data.drop(columns=['label']).values, dtype=torch.float32)/255
-    y_train_even = torch.tensor(train_even_data['label'].values, dtype=torch.long)
+    if torch.backends.mps.is_available():
+        device = torch.device('mps')
+        print('mps available')
+    elif torch.cuda.is_available():
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
 
-    X_test_even = torch.tensor(test_even_data.drop(columns=['label']).values, dtype=torch.float32)/255
-    y_test_even = torch.tensor(test_even_data['label'].values, dtype=torch.long)
+    X_train_even = torch.tensor(train_even_data.drop(columns=['label']).values, dtype=torch.float32, device=device)/255
+    y_train_even = torch.tensor(train_even_data['label'].values, dtype=torch.long, device=device)
+
+    X_test_even = torch.tensor(test_even_data.drop(columns=['label']).values, dtype=torch.float32, device=device)/255
+    y_test_even = torch.tensor(test_even_data['label'].values, dtype=torch.long, device=device)
 
     n_samples_even, n_features_even = X_train_even.shape
 
-    X_train_odd = torch.tensor(train_odd_data.drop(columns=['label']).values, dtype=torch.float32)/255
-    y_train_odd = torch.tensor(train_odd_data['label'].values, dtype=torch.long)
+    X_train_odd = torch.tensor(train_odd_data.drop(columns=['label']).values, dtype=torch.float32, device=device)/255
+    y_train_odd = torch.tensor(train_odd_data['label'].values, dtype=torch.long, device=device)
 
     X_test_odd = torch.tensor(test_odd_data.drop(columns=['label']).values, dtype=torch.float32)/255
     y_test_odd = torch.tensor(test_odd_data['label'].values, dtype=torch.long)
