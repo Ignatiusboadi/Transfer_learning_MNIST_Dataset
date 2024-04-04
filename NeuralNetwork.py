@@ -4,7 +4,6 @@ from torch.nn import functional as F
 import matplotlib.pyplot as plt
 import torch
 
-
 criterion = nn.CrossEntropyLoss()
 
 
@@ -35,7 +34,7 @@ class NeuralNetwork(nn.Module):
             optimizer.step()
             optimizer.zero_grad()
 
-            if  (epoch + 1) % 200 == 0:
+            if (epoch + 1) % 100 == 0:
                 print(f'Epoch {epoch + 1} out of {n_epochs}, loss= {loss.item():.4f}')
 
         with torch.no_grad():
