@@ -10,7 +10,7 @@ from torch import nn
 import numpy as np
 import seaborn as sns
 
-percentages = [.1, .4, .8]
+percentages = [.2, .4, .8]
 
 X_train_odd, X_train_even, X_test_odd, X_test_even, y_train_odd, y_train_even, y_test_odd, y_test_even, n_features_odd, n_features_even, n_samples_odd, n_samples_even = to_tensor()
 
