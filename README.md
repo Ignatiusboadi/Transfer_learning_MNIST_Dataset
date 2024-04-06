@@ -39,7 +39,7 @@ Follow these steps to set up and run the project:
 
 3. Install dependencies:
    ```
-   pip install torch torchvision matplotlib numpy pandas scikit-learn
+   pip install -r requirements.txt
    ```
 
 4. Run the project:
