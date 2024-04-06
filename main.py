@@ -10,6 +10,8 @@ from torch import nn
 import numpy as np
 import seaborn as sns
 
+percentages = [.1, .4, .8]
+
 X_train_odd, X_train_even, X_test_odd, X_test_even, y_train_odd, y_train_even, y_test_odd, y_test_even, n_features_odd, n_features_even = to_tensor()
 
 le_odd = LabelEncoder()
@@ -54,16 +56,21 @@ hidden_layer = 500
 
 # Task 1
 # # Softmax regression on Even numbers
-even_model = SoftmaxRegression(n_features_even, n_classes)
-optimizer = torch.optim.Adam(even_model.parameters(), lr=lr)
-even_model.fit(X_train_even, y_train_even, X_test_even, y_test_even, n_epochs, criterion, optimizer, le_even)
-plot_confusion_even(even_model, 'Softmax Regression for MNIST Even dataset', 'even')
+
+for percentage in percentages:
+    perc_samples = int(percentage * n_samples)
+    even_model = SoftmaxRegression(n_features_even, n_classes)
+    optimizer = torch.optim.Adam(even_model.parameters(), lr=lr)
+    even_model.fit(X_train_even, y_train_even, X_test_even, y_test_even, n_epochs, criterion, optimizer, le_even)
+    plot_confusion_even(even_model, 'Softmax Regression for MNIST Even dataset', 'even')
 
 # Softmax regression on Odd numbers
-odd_model = SoftmaxRegression(n_features_odd, n_classes)
-optimizer = torch.optim.Adam(odd_model.parameters(), lr=lr)
-odd_model.fit(X_train_odd, y_train_odd, X_test_odd, y_test_odd, n_epochs, criterion, optimizer, le_odd)
-plot_confusion_odd(odd_model, 'Softmax Regression for MNIST Odd dataset', 'odd')
+for percentage in percentages:
+    perc_samples = int(percentage * n_samples)
+    odd_model = SoftmaxRegression(n_features_odd, n_classes)
+    optimizer = torch.optim.Adam(odd_model.parameters(), lr=lr)
+    odd_model.fit(X_train_odd, y_train_odd, X_test_odd, y_test_odd, n_epochs, criterion, optimizer, le_odd)
+    plot_confusion_odd(odd_model, 'Softmax Regression for MNIST Odd dataset', 'odd')
 
 # Task 2
 # Neural Network on Even numbers
@@ -81,8 +88,6 @@ plot_confusion_odd(nn_odd_model, 'Neural Networks with one hidden layer(ReLU) fo
 
 # Task 3
 # Extracting the weights from the first layer of the nn model for odd numbers
-percentages = [.1, .4, .8]
-
 layer1_weight = nn_odd_model.layer1.weight.data
 
 # Applying the weights and activation of the nn model on the even numbers data
