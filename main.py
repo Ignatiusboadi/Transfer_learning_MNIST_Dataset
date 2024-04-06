@@ -12,7 +12,7 @@ import seaborn as sns
 
 percentages = [.1, .4, .8]
 
-X_train_odd, X_train_even, X_test_odd, X_test_even, y_train_odd, y_train_even, y_test_odd, y_test_even, n_features_odd, n_features_even = to_tensor()
+X_train_odd, X_train_even, X_test_odd, X_test_even, y_train_odd, y_train_even, y_test_odd, y_test_even, n_features_odd, n_features_even, n_samples_odd, n_samples_even = to_tensor()
 
 le_odd = LabelEncoder()
 le_odd.fit([1, 3, 5, 7, 9])
@@ -50,7 +50,7 @@ def plot_confusion_odd(model, title, file, test_data=X_test_odd):
 
 
 n_classes = 5
-n_epochs = 1000
+n_epochs = 100
 lr = 0.1
 hidden_layer = 500
 
@@ -58,32 +58,40 @@ hidden_layer = 500
 # # Softmax regression on Even numbers
 
 for percentage in percentages:
-    perc_samples = int(percentage * n_samples)
+    print(f'Softmax Regression with {100*percentage}% of MNIST Even dataset')
+    perc_samples_even = int(percentage * n_samples_even)
     even_model = SoftmaxRegression(n_features_even, n_classes)
     optimizer = torch.optim.Adam(even_model.parameters(), lr=lr)
-    even_model.fit(X_train_even, y_train_even, X_test_even, y_test_even, n_epochs, criterion, optimizer, le_even)
-    plot_confusion_even(even_model, 'Softmax Regression for MNIST Even dataset', 'even')
+    even_model.fit(X_train_even[:perc_samples_even], y_train_even[:perc_samples_even], X_test_even, y_test_even,
+                   n_epochs, criterion, optimizer, le_even)
+    plot_confusion_even(even_model, f'Softmax Regression for {100*percentage}% MNIST Even dataset',
+                        f'{100*percentage}% even')
 
 # Softmax regression on Odd numbers
 for percentage in percentages:
-    perc_samples = int(percentage * n_samples)
+    print(f'Softmax Regression with {100*percentage}% of MNIST Odd dataset')
+    perc_samples_odd = int(percentage * n_samples_odd)
     odd_model = SoftmaxRegression(n_features_odd, n_classes)
     optimizer = torch.optim.Adam(odd_model.parameters(), lr=lr)
-    odd_model.fit(X_train_odd, y_train_odd, X_test_odd, y_test_odd, n_epochs, criterion, optimizer, le_odd)
-    plot_confusion_odd(odd_model, 'Softmax Regression for MNIST Odd dataset', 'odd')
+    odd_model.fit(X_train_odd[:perc_samples_odd], y_train_odd[:perc_samples_odd], X_test_odd, y_test_odd, n_epochs,
+                  criterion, optimizer, le_odd)
+    plot_confusion_odd(odd_model, f'Softmax Regression for {100*percentage}% MNIST Odd dataset',
+                       f'{100*percentage}% odd')
 
 # Task 2
 # Neural Network on Even numbers
 nn_even_model = NeuralNetwork(n_features_even, hidden_layer, n_classes)
 optimizer = torch.optim.Adam(nn_even_model.parameters(), lr=lr)
 nn_even_model.fit(X_train_even, y_train_even, X_test_even, y_test_even, n_epochs, criterion, optimizer, le_even)
-plot_confusion_even(nn_even_model, 'Neural Networks with one hidden layer(ReLU) for MNIST Even dataset', 'nn_even')
+plot_confusion_even(nn_even_model, 'Neural Networks with one hidden layer(ReLU) for MNIST Even dataset',
+                    'nn_even')
 
 # Neural Network on Odd numbers
 nn_odd_model = NeuralNetwork(n_features_odd, hidden_layer, n_classes)
 optimizer = torch.optim.Adam(nn_odd_model.parameters(), lr=lr)
 nn_odd_model.fit(X_train_odd, y_train_odd, X_test_odd, y_test_odd, n_epochs, criterion, optimizer, le_odd)
-plot_confusion_odd(nn_odd_model, 'Neural Networks with one hidden layer(ReLU) for MNIST Odd dataset', 'nn_odd')
+plot_confusion_odd(nn_odd_model, 'Neural Networks with one hidden layer(ReLU) for MNIST Odd dataset',
+                   'nn_odd')
 
 
 # Task 3
